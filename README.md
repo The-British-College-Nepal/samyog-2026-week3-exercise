@@ -3,147 +3,117 @@
 **The British College (Leeds Beckett University) · Sudan Pudasaini**
 
 ```
-Progress: [██████░░░░░░░░░░░░] Step 1 of 3 (In Progress)
+Progress: [████████████░░░░░░] Step 2 of 3 (In Progress)
 ```
 
 ---
 
-> [!IMPORTANT]
-> ### 🏷️ Repository Creation & Naming Convention
-> Before writing any code, you must create your own copy of this lab repository:
-> 1. Click the green **"Use this template"** ➡️ **"Create a new repository"** button at the top right of this page (or click **Fork**).
-> 2. **Owner:** Select **`The-British-College-Nepal`** (or your own GitHub account).
-> 3. **Repository Name:** You **MUST** strictly follow this exact naming format:
->    ```text
->    <your-name>-ssd-2026-week3-exercise
->    ```
->    * ✅ **Correct Examples:**
->      * `sudan-ssd-2026-week3-exercise`
->      * `crystal-ssd-2026-week3-exercise`
->      * `garima-ssd-2026-week3-exercise`
->      * `sujal-ssd-2026-week3-exercise`
->      * `roshan-ssd-2026-week3-exercise`
->    * ❌ **Incorrect Examples:** `week3`, `my-lab3`, `exercise3`, `StatsLab`.
-> 4. **Visibility:** Select **Public**.
-> 5. Click **"Create repository"**.
-> 6. Clone your newly created repository to your laptop/lab machine:
->    ```bash
->    git clone https://github.com/The-British-College-Nepal/<your-name>-ssd-2026-week3-exercise.git
->    cd <your-name>-ssd-2026-week3-exercise
->    ```
+## ✅ Step 1 Complete! Excellent refactoring work!
+
+You successfully fixed code indentation, encapsulated internal state with `private` modifiers, eliminated cryptic 3GL names, and resolved the `getCount()` capacity bug.
+
+Now, let's fix the statistical calculation algorithms.
 
 ---
 
-## 🎯 Welcome to Your Week 3 Interactive Lab!
+## 🌿 Step 2 Git Workflow: Create Your Feature Branch
 
-Welcome! In professional software development, writing code that *simply executes* is only the bare minimum. Professional software engineering requires code to be **readable, self-documenting, maintainable, and safely encapsulated**.
-
-In this interactive lab, you will inherit a legacy class ([`Stats.java`](src/main/java/stats/Stats.java)) that represents typical un-engineered "student script" code:
-* Messy, inconsistent indentation.
-* Leaked internal state (missing `private` modifiers).
-* Cryptic 3GL method names (`getA()`, `getB()`, `get()`).
-* A critical array capacity bug.
-
-Your objective is to refactor this class into clean, documented, and thoroughly verified production code.
-
-Just like GitHub Skills:
-1. You work on your dedicated feature branch.
-2. Verify your code with JUnit 5 unit tests locally.
-3. Merge your branch into `main` and push to GitHub.
-4. GitHub Actions automatically tests your code.
-5. When your tests pass, **this README automatically updates to reveal Step 2!**
-
----
-
-## 🌿 The Git Branching Rule for Week 3
-
-> [!IMPORTANT]
-> ### 📢 In-Lab Policy: Work in a Feature Branch!
-> Never commit directly to `main`. Create an isolated feature branch for Step 1, verify your tests locally, and merge into `main` only when ready.
-
-Open your terminal inside your cloned repository and switch to a new branch:
+Before writing code for Step 2, create and switch to a fresh feature branch:
 
 ```bash
-# 1. Ensure your local main is up to date
+# 1. Ensure you have the latest updates on main
 git checkout main
 git pull origin main
 
-# 2. Create and switch to your Step 1 feature branch
-git checkout -b feature/step1-clean-code
-
-# 3. Confirm you are on your new branch (look for the * asterisk)
-git branch
+# 2. Create and switch to your Step 2 feature branch
+git checkout -b feature/step2-statistics
 ```
 
 ---
 
-## 📝 Step 1: Clean Code, Naming Conventions & Encapsulation
+## 📝 Step 2: Core Statistical Logic & Array Bounds
 
 Open [`src/main/java/stats/Stats.java`](src/main/java/stats/Stats.java) in your IDE.
 
+### ⚠️ The Array Bounds Bug Explained
+In the legacy code, loops iterated over `i < numbers.length`.  
+In Java, an uninitialized `int[]` array contains zeros (`0`).  
+If an array has capacity **10**, but the user only adds **3 negative numbers** (e.g., `-10, -5, -20`):
+* The array contains: `[-10, -5, -20, 0, 0, 0, 0, 0, 0, 0]`.
+* If a loop checks `i < numbers.length`, it will erroneously report `0` as the maximum value!
+* Similarly, `getAverage()` would divide the sum by 10 instead of 3!
+
+**Rule:** Statistical loops must iterate over added elements only: `i < this.count`.
+
 ### Your Tasks:
 
-1. **Fix Code Formatting & Indentation:**
-   * In your IDE, reformat the entire file:
-     * **IntelliJ IDEA:** Press `Ctrl + Alt + L` (Windows/Linux) or `Cmd + Option + L` (Mac).
-     * **Eclipse:** Press `Ctrl + Shift + F` (Windows/Linux) or `Cmd + Shift + F` (Mac).
-     * **VS Code:** Press `Shift + Alt + F` (Windows/Linux) or `Shift + Option + F` (Mac).
-
-2. **Enforce State Encapsulation:**
-   * Notice that `numbers` and `count` have default package-private visibility.
-   * Add the **`private`** access modifier to both attributes:
+1. **Implement `getTotal()`:**
+   * Iterate from index `0` up to `i < count`.
+   * Sum all values and return the total integer:
      ```java
-     private int[] numbers;
-     private int count;
-     ```
-
-3. **Rename Cryptic Legacy Method Names:**
-   * `getA()` $\rightarrow$ rename to **`getMax()`** (returns `int`).
-   * `getB()` $\rightarrow$ rename to **`getMin()`** (returns `int`).
-   * `get()` $\rightarrow$ rename to **`getAverage()`** (returns `double`).
-   * *Why?* A method name should be a descriptive verb or noun phrase explaining what it computes, not an arbitrary letter.
-
-4. **Fix the `getCount()` Capacity Bug:**
-   * Currently, `getCount()` returns `numbers.length`. This is a bug: `numbers.length` is the **capacity** of the array, not the number of values actually added!
-   * Fix it to return `this.count`:
-     ```java
-     public int getCount() {
-         return this.count;
+     int total = 0;
+     for (int i = 0; i < count; i++) {
+         total += numbers[i];
      }
+     return total;
      ```
+
+2. **Implement `getAverage()`:**
+   * Calculate the sum of all elements up to `count`.
+   * Divide the total by `count` cast as a `double`:
+     ```java
+     return total / (double) count;
+     ```
+
+3. **Implement `getMax()`:**
+   * Initialize `max = numbers[0]`.
+   * Loop from `i = 1` up to `i < count`.
+   * If `numbers[i] > max`, update `max = numbers[i]`.
+   * Return `max`.
+
+4. **Implement `getMin()`:**
+   * Initialize `min = numbers[0]`.
+   * Loop from `i = 1` up to `i < count`.
+   * If `numbers[i] < min`, update `min = numbers[i]`.
+   * Return `min`.
 
 ---
 
-## 🧪 How to Verify Step 1 Locally
+## 🧪 How to Verify Step 2 Locally
 
-Run the unit test suite for Step 1 in your IDE or terminal:
+Run both Step 1 and Step 2 unit tests:
 
 ```bash
-mvn test -Dtest=Step1CleanCodeTest
+mvn test -Dtest=Step1CleanCodeTest,Step2StatisticsTest
 ```
-*(Or right-click `Step1CleanCodeTest.java` in your IDE and select **Run**).*
+*(Or right-click `Step2StatisticsTest.java` in your IDE and select **Run**).*
 
-You should see **5 passing tests**:
-* ✅ `testNumbersFieldIsPrivate` — Verifies `numbers` is encapsulated.
-* ✅ `testCountFieldIsPrivate` — Verifies `count` is encapsulated.
-* ✅ `testMeaningfulMethodNamesExist` — Verifies `getMax()`, `getMin()`, `getAverage()`, `getTotal()`.
-* ✅ `testCrypticNamesEliminated` — Verifies `getA`, `getB`, and `get` have been removed or renamed.
-* ✅ `testGetCountReturnsAddedCount` — Verifies `getCount()` returns actual elements added.
+You should see all **10 tests pass**:
+* ✅ `testNumbersFieldIsPrivate`
+* ✅ `testCountFieldIsPrivate`
+* ✅ `testMeaningfulMethodNamesExist`
+* ✅ `testCrypticNamesEliminated`
+* ✅ `testGetCountReturnsAddedCount`
+* ✅ `testGetTotal` — Verifies total sum of elements.
+* ✅ `testGetAverage` — Verifies double precision average.
+* ✅ `testGetMax` — Verifies maximum element finding.
+* ✅ `testGetMin` — Verifies minimum element finding.
+* ✅ `testPartiallyFilledArrayBounds` — Confirms algorithms only inspect added elements, avoiding uninitialized zeros.
 
 ---
 
-## 🚀 How to Advance to Step 2
+## 🚀 How to Advance to Step 3
 
-Once all 5 tests are passing:
+Once your local tests pass:
 
 ```bash
 # 1. Stage and commit on your feature branch
 git add src/main/java/stats/Stats.java
-git commit -m "Step 1: Refactored legacy method names and enforced encapsulation"
+git commit -m "Step 2: Corrected statistical calculations and array bounds handling"
 
 # 2. Switch back to main and merge your feature branch
 git checkout main
-git merge feature/step1-clean-code
+git merge feature/step2-statistics
 
 # 3. Push main to trigger the autograder!
 git push origin main
@@ -151,4 +121,4 @@ git push origin main
 
 > [!TIP]
 > After pushing, wait ~15 seconds and refresh this page on GitHub (or run `git pull` locally).  
-> GitHub Actions will verify your solution and update this `README.md` to unlock **Step 2: Core Statistical Logic & Array Bounds**!
+> GitHub Actions will verify your solution and update this `README.md` to unlock **Step 3: Javadoc Documentation & Defensive Checks**!
