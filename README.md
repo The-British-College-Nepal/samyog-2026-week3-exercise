@@ -3,152 +3,114 @@
 **The British College (Leeds Beckett University) · Sudan Pudasaini**
 
 ```
-Progress: [██████░░░░░░░░░░░░] Step 1 of 3 (In Progress)
+Progress: [██████████████████] Step 3 of 3 (In Progress)
 ```
 
 ---
 
-> [!IMPORTANT]
-> ### 🏷️ Repository Creation & Naming Convention
-> Before writing any code, you must create your own copy of this lab repository:
-> 1. Click the green **"Use this template"** ➡️ **"Create a new repository"** button at the top right of this page (or click **Fork**).
-> 2. **Owner:** Select **`The-British-College-Nepal`** (or your own GitHub account).
-> 3. **Repository Name:** You **MUST** strictly follow this exact naming format:
->    ```text
->    <your-name>-ssd-2026-week3-exercise
->    ```
->    * ✅ **Correct Examples:**
->      * `sudan-ssd-2026-week3-exercise`
->      * `crystal-ssd-2026-week3-exercise`
->      * `garima-ssd-2026-week3-exercise`
->      * `sujal-ssd-2026-week3-exercise`
->      * `roshan-ssd-2026-week3-exercise`
->    * ❌ **Incorrect Examples:** `week3`, `my-lab3`, `exercise3`, `StatsLab`.
-> 4. **Visibility:** Select **Public**.
-> 5. Click **"Create repository"**.
-> 6. Clone your newly created repository to your laptop/lab machine:
->    ```bash
->    git clone https://github.com/The-British-College-Nepal/<your-name>-ssd-2026-week3-exercise.git
->    cd <your-name>-ssd-2026-week3-exercise
->    ```
+## ✅ Step 2 Complete! Outstanding progress!
+
+You have resolved the critical array bounds bug and implemented accurate mathematical operations for `getTotal()`, `getAverage()`, `getMax()`, and `getMin()`.
+
+Now, for the final challenge, you will add **standard Javadoc documentation and defensive exception handling**.
 
 ---
 
-## 🎯 Welcome to Your Week 3 Interactive Lab!
+## 🌿 Step 3 Git Workflow: Create Your Feature Branch
 
-Welcome! In professional software development, writing code that *simply executes* is only the bare minimum. Professional software engineering requires code to be **readable, self-documenting, maintainable, and safely encapsulated**.
-
-In this interactive lab, you will inherit a legacy class ([`Stats.java`](src/main/java/stats/Stats.java)) that represents typical un-engineered "student script" code:
-* Messy, inconsistent indentation.
-* Leaked internal state (missing `private` modifiers).
-* Cryptic 3GL method names (`getA()`, `getB()`, `get()`).
-* A critical array capacity bug.
-
-Your objective is to refactor this class into clean, documented, and thoroughly verified production code.
-
-Just like GitHub Skills:
-1. You work on your dedicated feature branch.
-2. Verify your code with JUnit 5 unit tests locally.
-3. Merge your branch into `main` and push to GitHub.
-4. GitHub Actions automatically tests your code.
-5. When your tests pass, **this README automatically updates to reveal Step 2!**
-
----
-
-## 🌿 The Git Branching Rule for Week 3
-
-> [!IMPORTANT]
-> ### 📢 In-Lab Policy: Work in a Feature Branch!
-> Never commit directly to `main`. Create an isolated feature branch for Step 1, verify your tests locally, and merge into `main` only when ready.
-
-Open your terminal inside your cloned repository and switch to a new branch:
+Before writing code for Step 3, switch to a fresh feature branch:
 
 ```bash
-# 1. Ensure your local main is up to date
+# 1. Ensure you have the latest updates on main
 git checkout main
 git pull origin main
 
-# 2. Create and switch to your Step 1 feature branch
-git checkout -b feature/step1-clean-code
-
-# 3. Confirm you are on your new branch (look for the * asterisk)
-git branch
+# 2. Create and switch to your Step 3 feature branch
+git checkout -b feature/step3-documentation
 ```
 
 ---
 
-## 📝 Step 1: Clean Code, Naming Conventions & Encapsulation
+## 📝 Step 3: Javadoc Documentation & Defensive Checks
 
 Open [`src/main/java/stats/Stats.java`](src/main/java/stats/Stats.java) in your IDE.
 
 ### Your Tasks:
 
-1. **Fix Code Formatting & Indentation:**
-   * In your IDE, reformat the entire file:
-     * **IntelliJ IDEA:** Press `Ctrl + Alt + L` (Windows/Linux) or `Cmd + Option + L` (Mac).
-     * **Eclipse:** Press `Ctrl + Shift + F` (Windows/Linux) or `Cmd + Shift + F` (Mac).
-     * **VS Code:** Press `Shift + Alt + F` (Windows/Linux) or `Shift + Option + F` (Mac).
-
-2. **Enforce State Encapsulation:**
-   * Notice that `numbers` and `count` have default package-private visibility.
-   * Add the **`private`** access modifier to both attributes:
+1. **Add Defensive Checks Against Empty Data:**
+   * What happens if a caller invokes `getMax()`, `getMin()`, or `getAverage()` before any numbers have been added (`count == 0`)?
+   * In each of these three methods, add a defensive invariant check at the top:
      ```java
-     private int[] numbers;
-     private int count;
-     ```
-
-3. **Rename Cryptic Legacy Method Names:**
-   * `getA()` $\rightarrow$ rename to **`getMax()`** (returns `int`).
-   * `getB()` $\rightarrow$ rename to **`getMin()`** (returns `int`).
-   * `get()` $\rightarrow$ rename to **`getAverage()`** (returns `double`).
-   * *Why?* A method name should be a descriptive verb or noun phrase explaining what it computes, not an arbitrary letter.
-
-4. **Fix the `getCount()` Capacity Bug:**
-   * Currently, `getCount()` returns `numbers.length`. This is a bug: `numbers.length` is the **capacity** of the array, not the number of values actually added!
-   * Fix it to return `this.count`:
-     ```java
-     public int getCount() {
-         return this.count;
+     if (count == 0) {
+         throw new IllegalStateException("No values have been added to calculate statistics.");
      }
      ```
+   * *Why?* Accessing `numbers[0]` when `count == 0` is undefined domain behavior. Throwing an `IllegalStateException` protects data integrity!
+
+2. **Add Complete Javadoc Comments:**
+   Document every class, constructor, and method following the official Oracle Javadoc standards:
+   * **Class Header:**
+     ```java
+     /**
+      * Calculates statistical metrics from a dynamic collection of integer values.
+      *
+      * @author Your Name (or Sudan Pudasaini)
+      */
+     public class Stats { ... }
+     ```
+   * **Constructor:** Use `@param capacity` to describe the maximum array size.
+   * **`addValue(int value)`:** Use `@param value` to describe the integer being appended.
+   * **Methods returning values (`getCount`, `getTotal`, `getAverage`, `getMax`, `getMin`):** Use `@return` to describe the computed value.
+   * **Methods throwing exceptions:** Use `@throws IllegalStateException` to document when the error occurs.
+
+3. **Run and Verify the Driver Program:**
+   * Open [`src/main/java/stats/Driver.java`](src/main/java/stats/Driver.java) in your IDE.
+   * Run the `main()` method and verify clean console output:
+     ```text
+     ==================================================
+     📊 SSD Week 3: Stats Class Demonstration
+     ==================================================
+     Numbers stored : [42, 88, 12, 65, 30, 95, 14, 50, 71, 23]
+     Count          : 10
+     Total          : 490
+     Average        : 49.00
+     Minimum value  : 12
+     Maximum value  : 95
+     ==================================================
+     ```
 
 ---
 
-## 🧪 How to Verify Step 1 Locally
+## 🧪 How to Verify Step 3 Locally
 
-Run the unit test suite for Step 1 in your IDE or terminal:
+Run all unit tests across the entire project:
 
 ```bash
-mvn test -Dtest=Step1CleanCodeTest
+mvn test
 ```
-*(Or right-click `Step1CleanCodeTest.java` in your IDE and select **Run**).*
+*(Or right-click the `src/test/java` folder in your IDE and select **Run 'All Tests'**).*
 
-You should see **5 passing tests**:
-* ✅ `testNumbersFieldIsPrivate` — Verifies `numbers` is encapsulated.
-* ✅ `testCountFieldIsPrivate` — Verifies `count` is encapsulated.
-* ✅ `testMeaningfulMethodNamesExist` — Verifies `getMax()`, `getMin()`, `getAverage()`, `getTotal()`.
-* ✅ `testCrypticNamesEliminated` — Verifies `getA`, `getB`, and `get` have been removed or renamed.
-* ✅ `testGetCountReturnsAddedCount` — Verifies `getCount()` returns actual elements added.
+All **15 unit tests** across `Step1CleanCodeTest`, `Step2StatisticsTest`, and `Step3DocumentationTest` should pass!
 
 ---
 
-## 🚀 How to Advance to Step 2
+## 🚀 How to Finish the Lab
 
-Once all 5 tests are passing:
+Once all 15 tests pass locally:
 
 ```bash
 # 1. Stage and commit on your feature branch
 git add src/main/java/stats/Stats.java
-git commit -m "Step 1: Refactored legacy method names and enforced encapsulation"
+git commit -m "Step 3: Completed Javadoc documentation and defensive exception checks"
 
 # 2. Switch back to main and merge your feature branch
 git checkout main
-git merge feature/step1-clean-code
+git merge feature/step3-documentation
 
-# 3. Push main to trigger the autograder!
+# 3. Push main to claim your completion badge!
 git push origin main
 ```
 
 > [!TIP]
 > After pushing, wait ~15 seconds and refresh this page on GitHub (or run `git pull` locally).  
-> GitHub Actions will verify your solution and update this `README.md` to unlock **Step 2: Core Statistical Logic & Array Bounds**!
+> GitHub Actions will verify your entire lab and grant you the **Week 3 Exercise Completion Badge**!
