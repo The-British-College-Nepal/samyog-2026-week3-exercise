@@ -53,7 +53,7 @@ public class Stats {
      */
     public int getMax() {
         if (count == 0) {
-            throw new IllegalStateException("No values have been added");
+            throw new IllegalStateException("No values have been added to add statistics");
         }
 
         int max = numbers[0];
@@ -75,7 +75,7 @@ public class Stats {
      */
     public int getMin() {
         if (count == 0) {
-            throw new IllegalStateException("No values have been added");
+            throw new IllegalStateException("No values have been added to calculate statistics");
         }
 
         int min = numbers[0];
@@ -97,7 +97,7 @@ public class Stats {
      */
     public double getAverage() {
         if (count == 0) {
-            throw new IllegalStateException("No values have been added");
+            throw new IllegalStateException("No values have been added to calculate statistics");
         }
 
         return (double) getTotal() / count;
